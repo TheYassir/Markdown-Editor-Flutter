@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -25,19 +23,11 @@ class _HomePageState extends State<HomePage> {
   File? _selectedFile;
   String? _currentContent;
 
-  // Automatiquement appelée par Flutter à l'initialisation du Widget
   @override
   void initState() {
-    // Alternative au TextField#onChanged(), (la ligne 187)
-    // _textEditingController.addListener(() {
-    //   setState(() {});
-    // });
-
     super.initState();
   }
 
-  // Automatiquement appelée par Flutter quand le widget est détruit
-  // à utiliser par exemple pour libérer les ressources
   @override
   void dispose() {
     super.dispose();
@@ -54,11 +44,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void setSelectedFile({required File file, required String content}) {
-    // setState() va déclancher le rebuild de mon widget
     setState(() {
-      // Mettre ici UNIQUEMENT l'affectation de valeur aux attribut du State
-      // (Convention Flutter, évite des erreurs de build asynchrone)
-      // https://api.flutter.dev/flutter/widgets/State/setState.html
       _selectedFile = file;
       _currentContent = content;
       _textEditingController.text = content;
@@ -67,8 +53,6 @@ class _HomePageState extends State<HomePage> {
 
   void _openFile() async {
     try {
-      // Utilise la lib file_picker pour afficher une fenêtre de choix de fichier
-      // adaptée à la plateforme d'éxecution (Windows, Linux ou macOS)
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['md'],
@@ -83,11 +67,7 @@ class _HomePageState extends State<HomePage> {
         return;
       }
 
-      // On instancie un variable de la class dart File avec le path choisi par l'utilisateur
-      // (représente directement un Fichier sur le système)
       File file = File(filePath);
-      // On lit le contenu du fichier
-      // L'accès au fichier sur le disque se fait uniquement à ce moment
       String content = await file.readAsString();
       print("Contenu du fichier : ${content.substring(0, 100)} [...]");
 
@@ -104,7 +84,6 @@ class _HomePageState extends State<HomePage> {
     print(
         "Contenu de la saisie utilisateur : ${_currentContent!.substring(0, 100)} [...]");
     try {
-      // On écrit le contenu du fichier sur le disque (écrase le contenu existant)
       await _selectedFile!.writeAsString(_currentContent!);
 
       if (context.mounted) {
@@ -122,8 +101,6 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    // On utilise la lib FilePicker pour afficher une fenêtre de choix de fichier
-    // FilePicker.saveFile() permet de choisir un fichier et de définir un nom de fichier 
     String? outputFilePath = await FilePicker.platform.saveFile(
       dialogTitle: 'Veuillez choisir un fichier :',
       fileName: basename(_selectedFile!.path),
@@ -135,10 +112,8 @@ class _HomePageState extends State<HomePage> {
     }
 
     print('Nouveau fichier choisi : $outputFilePath');
-    // On change le fichier sélectionné par l'utilisateur
     File file = File(outputFilePath);
     setSelectedFile(file: file, content: _currentContent!);
-    // ignore: use_build_context_synchronously
     await _saveFile(context);
   }
 
@@ -185,7 +160,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             if (_selectedFile != null)
-              Text("Opened file : ${_selectedFile!.path}"),
+              Text("Opened file : ${_selectedFile!.uri}"),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

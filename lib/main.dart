@@ -15,6 +15,7 @@ class MainApp extends StatelessWidget {
         colorSchemeSeed: Colors.blue,
       ),
       home: const HomePage(title: "Fleet Manager"),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -1,3 +1,12 @@
-# markdown_editor
+# Markdown Editor in Flutter
 
-A new Flutter project.
+You can open Markdown File, edit and save it.
+
+## Packages
+
+file_picker
+flutter_markdown
+
+## Link Record of the project
+
+[Click here](ScreenProject.png)
